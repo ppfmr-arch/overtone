@@ -1,0 +1,798 @@
+/* ---------------------------------------------------------------------------
+   Монохром. Цвет в интерфейсе есть только у обложек — всё остальное строится
+   на восьми оттенках серого, поэтому иерархия держится на контрасте и отступах,
+   а не на акцентном цвете.
+   --------------------------------------------------------------------------- */
+:root {
+  --bg: #0b0b0c;
+  --panel: #101012;
+  --surface: #151518;
+  --hover: #1d1d21;
+  --active: #26262b;
+  --line: #232327;
+  --text: #ededf0;
+  --muted: #8a8a92;
+  --dim: #5c5c64;
+  --accent: #f4f4f6;
+
+  --titlebar-h: 34px;
+  --player-h: 88px;
+  --sidebar-w: 244px;
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+  display: grid;
+  grid-template-rows: var(--titlebar-h) 1fr auto;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* --- Заголовок окна ------------------------------------------------------ */
+.titlebar {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.titlebar__drag {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  -webkit-app-region: drag;
+}
+
+.titlebar__name {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--dim);
+  font-weight: 600;
+}
+
+.titlebar__controls {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar__controls button {
+  width: 46px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.titlebar__controls svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 1.2;
+}
+
+.titlebar__controls button:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.titlebar__controls .is-danger:hover {
+  background: #b4212b;
+  color: #fff;
+}
+
+/* --- Каркас -------------------------------------------------------------- */
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 0;
+}
+
+.sidebar {
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 8px 0;
+  min-height: 0;
+}
+
+.sidebar__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nav:hover {
+  color: var(--text);
+  background: var(--hover);
+}
+
+.nav[data-active] {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.sidebar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 12px 8px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.sidebar__head button {
+  background: none;
+  border: 0;
+  color: var(--dim);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.sidebar__head button:hover {
+  color: var(--text);
+  background: var(--hover);
+}
+
+.sidebar__list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-height: 0;
+}
+
+.pl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.pl:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.pl[data-active] {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.pl__name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pl__count {
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.sidebar__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 11px;
+  color: var(--dim);
+  border-top: 1px solid var(--line);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dim);
+  flex: none;
+}
+
+.dot[data-ok] {
+  background: #4a8f57;
+}
+
+.dot[data-bad] {
+  background: #b4212b;
+}
+
+/* --- Контент ------------------------------------------------------------- */
+.content {
+  overflow-y: auto;
+  padding: 26px 30px 30px;
+  min-height: 0;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+
+.searchbar {
+  position: relative;
+  max-width: 560px;
+  margin-bottom: 22px;
+}
+
+.searchbar svg {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dim);
+}
+
+.searchbar input {
+  width: 100%;
+  padding: 11px 14px 11px 42px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  user-select: text;
+}
+
+.searchbar input:focus {
+  border-color: #3a3a42;
+  background: var(--hover);
+}
+
+.searchbar input::placeholder {
+  color: var(--dim);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: #33333a;
+}
+
+.chip[data-on] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b0b0c;
+  font-weight: 600;
+}
+
+/* --- Список треков ------------------------------------------------------- */
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 28px 40px 1fr 150px 78px 34px;
+  align-items: center;
+  gap: 14px;
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  cursor: default;
+}
+
+.row:hover {
+  background: var(--hover);
+}
+
+.row[data-playing] {
+  background: var(--surface);
+}
+
+.row[data-playing] .row__title {
+  color: #fff;
+}
+
+.row__idx {
+  color: var(--dim);
+  font-size: 13px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.row:hover .row__idx {
+  color: var(--text);
+}
+
+.row__art {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background: var(--surface) center/cover no-repeat;
+  flex: none;
+}
+
+.row__main {
+  min-width: 0;
+}
+
+.row__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row__artist {
+  font-size: 12.5px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row__album {
+  font-size: 12.5px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row__dur {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.row__menu {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  cursor: pointer;
+  opacity: 0;
+  border-radius: 4px;
+  padding: 4px;
+  display: grid;
+  place-items: center;
+}
+
+.row:hover .row__menu {
+  opacity: 1;
+}
+
+.row__menu:hover {
+  color: var(--text);
+  background: var(--active);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 60px 0;
+  text-align: center;
+  color: var(--dim);
+}
+
+.empty h3 {
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.notice {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-left: 2px solid #6b5a2a;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12.5px;
+  margin-bottom: 16px;
+}
+
+.btn {
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--hover);
+  border-color: #33333a;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #0b0b0c;
+  border-color: var(--accent);
+}
+
+.btn--primary:hover {
+  background: #fff;
+}
+
+.roots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 14px 0 20px;
+  max-width: 620px;
+}
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.root span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.root button {
+  border: 0;
+  background: none;
+  color: var(--dim);
+  cursor: pointer;
+}
+
+.root button:hover {
+  color: #d76b72;
+}
+
+/* --- Плеер --------------------------------------------------------------- */
+.player {
+  height: var(--player-h);
+  display: grid;
+  grid-template-columns: 1fr minmax(360px, 42%) 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 0 18px;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+}
+
+/* Без этого `display:grid` перебивает атрибут hidden и пустой плеер видно на старте. */
+.player[hidden] {
+  display: none;
+}
+
+.player__now {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cover {
+  width: 52px;
+  height: 52px;
+  border-radius: 4px;
+  background: var(--surface) center/cover no-repeat;
+  flex: none;
+}
+
+.player__meta {
+  min-width: 0;
+}
+
+.player__title {
+  font-size: 13.5px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player__artist {
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.player__buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.icon:hover {
+  color: var(--text);
+}
+
+.icon[data-on] {
+  color: var(--text);
+}
+
+.icon[data-on]::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translateY(13px);
+}
+
+.icon {
+  position: relative;
+}
+
+.icon--play {
+  width: 38px;
+  height: 38px;
+  background: var(--accent);
+  color: #0b0b0c;
+}
+
+.icon--play svg {
+  fill: currentColor;
+  stroke: none;
+  width: 16px;
+  height: 16px;
+}
+
+.icon--play:hover {
+  background: #fff;
+  color: #0b0b0c;
+  transform: scale(1.04);
+}
+
+#np-like[data-on] {
+  color: var(--text);
+}
+
+#np-like[data-on] svg {
+  fill: currentColor;
+}
+
+#np-like[data-on]::after {
+  display: none;
+}
+
+.player__seek {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-size: 11px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--active);
+  cursor: pointer;
+  position: relative;
+}
+
+.track__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  background: var(--muted);
+  position: relative;
+}
+
+.track:hover .track__fill {
+  background: var(--accent);
+}
+
+.track:hover .track__fill::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-50%);
+}
+
+.player__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.track--vol {
+  flex: none;
+  width: 88px;
+}
+
+.vol-icon {
+  color: var(--muted);
+}
+
+/* --- Тост ---------------------------------------------------------------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--player-h) + 18px);
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #1a1a1e;
+  color: var(--text);
+  font-size: 13px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+  max-width: 70vw;
+  z-index: 50;
+}
+
+/* --- Меню трека ---------------------------------------------------------- */
+.menu {
+  position: fixed;
+  min-width: 200px;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #17171b;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.menu hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 5px 0;
+}
+
+/* --- Скроллбары ---------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a30;
+  border-radius: 5px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a42;
+  background-clip: content-box;
+}

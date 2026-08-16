@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' http://127.0.0.1:* https: data:; media-src http://127.0.0.1:*; connect-src http://127.0.0.1:*"
+    />
+    <title>Overtone</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <div class="titlebar__drag">
+        <span class="titlebar__name">OVERTONE</span>
+      </div>
+      <div class="titlebar__controls">
+        <button data-win="minimize" title="Свернуть" aria-label="Свернуть">
+          <svg viewBox="0 0 12 12"><path d="M2 6h8" /></svg>
+        </button>
+        <button data-win="maximize" title="Развернуть" aria-label="Развернуть">
+          <svg viewBox="0 0 12 12"><rect x="2.5" y="2.5" width="7" height="7" /></svg>
+        </button>
+        <button data-win="close" class="is-danger" title="Закрыть" aria-label="Закрыть">
+          <svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <nav class="sidebar">
+        <div class="sidebar__group">
+          <button class="nav" data-view="search" data-active>
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6" /><path d="M15.5 15.5L21 21" /></svg>
+            Поиск
+          </button>
+          <button class="nav" data-view="liked">
+            <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7c0 4.9-7 9.3-7 9.3z" /></svg>
+            Любимое
+          </button>
+          <button class="nav" data-view="local">
+            <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+            Мои файлы
+          </button>
+          <button class="nav" data-view="settings">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z" /></svg>
+            Настройки
+          </button>
+        </div>
+
+        <div class="sidebar__head">
+          <span>Плейлисты</span>
+          <button id="new-playlist" title="Создать плейлист" aria-label="Создать плейлист">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+          </button>
+        </div>
+        <div class="sidebar__list" id="playlists"></div>
+
+        <div class="sidebar__foot">
+          <span class="dot" id="core-dot"></span>
+          <span id="core-status">подключение…</span>
+        </div>
+      </nav>
+
+      <main class="content" id="content"></main>
+    </div>
+
+    <footer class="player" id="player" hidden>
+      <div class="player__now">
+        <div class="cover" id="np-cover"></div>
+        <div class="player__meta">
+          <div class="player__title" id="np-title"></div>
+          <div class="player__artist" id="np-artist"></div>
+        </div>
+        <button class="icon" id="np-like" title="В любимое" aria-label="В любимое">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7c0 4.9-7 9.3-7 9.3z" /></svg>
+        </button>
+      </div>
+
+      <div class="player__center">
+        <div class="player__buttons">
+          <button class="icon" id="shuffle" title="Перемешать" aria-label="Перемешать">
+            <svg viewBox="0 0 24 24"><path d="M3 7h4l10 10h4M17 7h4M3 17h4l3-3" /><path d="M18 4l3 3-3 3M18 14l3 3-3 3" /></svg>
+          </button>
+          <button class="icon" id="prev" title="Предыдущий" aria-label="Предыдущий">
+            <svg viewBox="0 0 24 24"><path d="M18 5v14L8 12zM6 5v14" /></svg>
+          </button>
+          <button class="icon icon--play" id="play" title="Play" aria-label="Play">
+            <svg viewBox="0 0 24 24" id="play-icon"><path d="M7 4l13 8-13 8z" /></svg>
+          </button>
+          <button class="icon" id="next" title="Следующий" aria-label="Следующий">
+            <svg viewBox="0 0 24 24"><path d="M6 5v14l10-7zM18 5v14" /></svg>
+          </button>
+          <button class="icon" id="repeat" title="Повтор" aria-label="Повтор">
+            <svg viewBox="0 0 24 24"><path d="M4 12a5 5 0 0 1 5-5h11M20 12a5 5 0 0 1-5 5H4" /><path d="M17 4l3 3-3 3M7 14l-3 3 3 3" /></svg>
+          </button>
+        </div>
+        <div class="player__seek">
+          <span id="t-cur">0:00</span>
+          <div class="track" id="seek"><div class="track__fill" id="seek-fill"></div></div>
+          <span id="t-dur">0:00</span>
+        </div>
+      </div>
+
+      <div class="player__right">
+        <span class="badge" id="np-source"></span>
+        <svg class="vol-icon" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM17 9a4 4 0 0 1 0 6" /></svg>
+        <div class="track track--vol" id="vol"><div class="track__fill" id="vol-fill"></div></div>
+      </div>
+    </footer>
+
+    <audio id="audio"></audio>
+    <div class="toast" id="toast" hidden></div>
+    <script src="app.js"></script>
+  </body>
+</html>

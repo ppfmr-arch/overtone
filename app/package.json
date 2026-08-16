@@ -1,0 +1,29 @@
+{
+  "name": "overtone",
+  "version": "0.1.0",
+  "description": "Плеер с поиском музыки по нескольким платформам",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "dist:dir": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^43.4.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "dev.local.overtone",
+    "productName": "Overtone",
+    "files": ["main.js", "preload.js", "discord.js", "renderer/**"],
+    "extraResources": [
+      {
+        "from": "../core/target/release/mp-core.exe",
+        "to": "mp-core.exe"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# Сборка
+core/target/
+app/node_modules/
+app/dist/
+
+# Временное
+*.log
+*.tmp
+*.json.tmp
+
+# Системное
+Thumbs.db
+Desktop.ini
+.DS_Store
